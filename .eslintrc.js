@@ -21,8 +21,21 @@ module.exports = {
     es6: true,
     browser: true,
   },
-  // 可省略前缀 eslint-config-
-  // 导入插件的 module.exports.configs.xxx
+  /**
+   * 内置
+   * eslint:xxx
+   *
+   * 导入配置
+   * 可省略前缀 eslint-config-
+   *
+   * 导入插件
+   * 插件：module.exports.configs.xxx
+   * 可省略前缀 eslint-plugin-
+   * plugin:packageName/configName
+   *
+   * 使用配置文件
+   * 相对路径、绝对路径
+   */
   extends: [
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
