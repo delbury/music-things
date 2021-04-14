@@ -103,5 +103,7 @@ module.exports = {
     'space-infix-ops': 'warn', // 操作符周围空格
     'semi-style': ['warn', 'last'], // 分号位置
     'space-unary-ops': ['warn'], // 一元操作符前后空格
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };
