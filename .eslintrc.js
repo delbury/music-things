@@ -105,5 +105,6 @@ module.exports = {
     'space-unary-ops': ['warn'], // 一元操作符前后空格
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'vue/html-self-closing': 'off',
   },
 };
