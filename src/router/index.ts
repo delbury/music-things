@@ -6,6 +6,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('/@/pages/home/index.vue'),
   },
   {
+    path: '/test',
+    component: () => import('/@/pages/test/index.vue'),
+  },
+  {
     path: '/:notfound(.*)',
     redirect: '/',
   },

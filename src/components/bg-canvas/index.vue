@@ -9,7 +9,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import CanvasAnimation from './CanvasAnimation';
+import TheWorker from './help.worker?worker';
+import { InitCanvasWorkerEvent } from '/@types/index';
 
 export default defineComponent({
   setup() {
@@ -18,10 +19,17 @@ export default defineComponent({
 
     onMounted(() => {
       if(canvas.value && wrapper.value) {
-        const ca = new CanvasAnimation(canvas.value);
         const wrapperSize = wrapper.value.getBoundingClientRect();
-        ca.setSize(wrapperSize.width, wrapperSize.height);
-        ca.clear('#000');
+        // 使用 worker 渲染 offscreencanvas
+        const worker = new TheWorker();
+        const offscreen = canvas.value.transferControlToOffscreen();
+        const event: InitCanvasWorkerEvent = {
+          type: 'init',
+          width: wrapperSize.width,
+          height: wrapperSize.height,
+          canvas: offscreen,
+        };
+        worker.postMessage(event, [offscreen]);
       }
     });
 

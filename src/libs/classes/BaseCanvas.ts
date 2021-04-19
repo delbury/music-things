@@ -5,13 +5,15 @@ import Events from './Events';
 
 // 配置参数类型
 interface BaseCanvasOptions {
-  fillStyle?: string;
+  bgColor?: string; // 背景颜色
 }
 export default class BaseCanvas extends Events {
-  public canvas: HTMLCanvasElement;
+  public canvas: HTMLCanvasElement | OffscreenCanvas;
   public ctx: CanvasRenderingContext2D;
-  protected options: BaseCanvasOptions = {};
-  constructor(canvas: HTMLCanvasElement, options: BaseCanvasOptions = {}) {
+  protected options: Required<BaseCanvasOptions> = {
+    bgColor: '#000',
+  };
+  constructor(canvas: HTMLCanvasElement | OffscreenCanvas, options: BaseCanvasOptions = {}) {
     super();
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -21,21 +23,23 @@ export default class BaseCanvas extends Events {
 
   // 设置配置
   setDefault(options: BaseCanvasOptions): void {
-    this.options.fillStyle = options.fillStyle ?? '#000';
+    Object.assign(this.options, options);
   }
 
   // 设置 canvas 的宽高
   setSize(w: number, h: number): void {
     this.canvas.width = w;
     this.canvas.height = h;
+
+    this.clear(true);
   }
 
   // 清除
-  clear(color?: string): void {
-    if(color) {
+  clear(fillWithBgColor = false): void {
+    if(fillWithBgColor) {
       // 填充
       this.ctx.save();
-      this.ctx.fillStyle = color;
+      this.ctx.fillStyle = this.options.bgColor;
       this.ctx.fillRect(0, 0, this.width, this.height);
       this.ctx.restore();
     } else {
