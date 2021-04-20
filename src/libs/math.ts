@@ -123,6 +123,10 @@ export class Projection {
 
 // 工具类
 export class Methods {
+  constructor() {
+    // 禁止 new
+    if(new.target === Methods) throw Error('can\'t new a Methods instance');
+  }
   // 范围内随机值
   static randomValue(min: number, max: number): number {
     return Math.random() * (max - min) + min;
@@ -152,5 +156,41 @@ export class Methods {
   // 随机正负值范围
   static randomPlusMinus(min = 0, max = 0): number {
     return Methods.randomValue(min, max) * (Math.random() > 0.5 ? 1 : -1);
+  }
+
+  /**
+   * 切割数字
+   * @param total 总数
+   * @param perGroup 每组的数量
+   * @param autoMergeLast 最后一组是否自动判断与上一组合并
+   * @returns 切割后的数字数组
+   */
+  static splitNumber(total: number, perGroup: number, autoMergeLast = true): number[] {
+    const res: number[] = [];
+    while(total > 0) {
+      if(total >= perGroup) {
+        // 切割每组
+        res.push(perGroup);
+        total -= perGroup;
+
+      } else if(autoMergeLast && res.length) {
+        // 自动合并
+        const isMerge = !Math.round(total / perGroup);
+        if(isMerge) {
+          // 合并
+          res[res.length - 1] += total;
+          total = 0;
+        } else {
+          // 不合并
+          res.push(total);
+          total = 0;
+        }
+      } else {
+        // 不自动合并，则剩余部分单独一组
+        res.push(total);
+        total = 0;
+      }
+    }
+    return res;
   }
 }

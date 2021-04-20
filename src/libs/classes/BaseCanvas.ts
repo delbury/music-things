@@ -11,7 +11,7 @@ export default class BaseCanvas extends Events {
   public canvas: HTMLCanvasElement | OffscreenCanvas;
   public ctx: CanvasRenderingContext2D;
   protected options: Required<BaseCanvasOptions> = {
-    bgColor: '#000',
+    bgColor: '',
   };
   constructor(canvas: HTMLCanvasElement | OffscreenCanvas, options: BaseCanvasOptions = {}) {
     super();
@@ -36,7 +36,7 @@ export default class BaseCanvas extends Events {
 
   // 清除
   clear(fillWithBgColor = false): void {
-    if(fillWithBgColor) {
+    if(fillWithBgColor && this.options.bgColor) {
       // 填充
       this.ctx.save();
       this.ctx.fillStyle = this.options.bgColor;

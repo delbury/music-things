@@ -3,39 +3,50 @@
     ref="wrapper"
     class="comp-bg-canvas"
   >
-    <canvas ref="canvas"></canvas>
+    <!-- <div>fps: {{ fps }}</div> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import TheWorker from './help.worker?worker';
-import { InitCanvasWorkerEvent } from '/@types/index';
+import { InitCanvasWorkerEvent, CanvasWorkerPostEvent } from '/@types/index';
 
 export default defineComponent({
   setup() {
-    const canvas = ref<HTMLCanvasElement>();
     const wrapper = ref<HTMLDivElement>();
+    const count = ref<number>(1000);
+    const fps = ref<number>(0);
 
     onMounted(() => {
-      if(canvas.value && wrapper.value) {
+      if(wrapper.value) {
         const wrapperSize = wrapper.value.getBoundingClientRect();
         // 使用 worker 渲染 offscreencanvas
-        const worker = new TheWorker();
-        const offscreen = canvas.value.transferControlToOffscreen();
+        const worker = new TheWorker(); // 创建 worker
+        const canvas = document.createElement('canvas'); // 创建 canvas
+        canvas.classList.add('absolute-tl'); // 绝对定位
+        wrapper.value.append(canvas);
+
+        const offscreen = canvas.transferControlToOffscreen();
         const event: InitCanvasWorkerEvent = {
           type: 'init',
           width: wrapperSize.width,
           height: wrapperSize.height,
+          count: count.value,
           canvas: offscreen,
         };
+        // 获取 fps
+        worker.addEventListener('message', (ev: MessageEvent<CanvasWorkerPostEvent<number>>) => {
+          fps.value = ev.data.data;
+        });
+
         worker.postMessage(event, [offscreen]);
       }
     });
 
     return {
-      canvas,
       wrapper,
+      fps,
     };
   },
 });
@@ -43,6 +54,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .comp-bg-canvas {
+  position: relative;
   width: 100%;
   height: 100%;
 }

@@ -2,7 +2,7 @@
  * 粒子类
  */
 
-import { Methods } from '../math';
+import { Methods } from '/@/libs/math';
 
 
 // 边界的类型 [xmin, xmax, ymin, ymax]
@@ -33,7 +33,7 @@ export default class Particle {
   ctx: CanvasRenderingContext2D;
   // 参数
   options: Required<ParticleOptions> = {
-    color: '#fff',
+    color: '#000',
   };
   // 状态
   states: ParticleStates = {
@@ -134,7 +134,7 @@ export default class Particle {
     this.ctx.beginPath();
     this.ctx.arc(this.#x, this.#y, this.size, 0, Math.PI * 2);
     this.ctx.fill();
-    this.ctx.closePath();
+    // this.ctx.closePath();
     this.ctx.restore();
   }
 
