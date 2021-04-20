@@ -16,7 +16,7 @@ export default defineComponent({});
 .wrapper {
   width: 500px;
   height: 500px;
-  color: skyblue;
+  color: #87ceeb;
   background-image: paint(bg-transparent);
 }
 </style>

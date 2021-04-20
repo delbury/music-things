@@ -1,4 +1,4 @@
-export interface InitCanvasWorkerEvent {
+export declare interface InitCanvasWorkerEvent {
   type: string;
   width: number;
   height: number;
